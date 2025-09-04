@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message ProtobufMsg {
+  string identifier = 1;
+  bytes protobuf = 2;
+}

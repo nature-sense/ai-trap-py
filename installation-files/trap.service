@@ -1,0 +1,14 @@
+[Unit]
+Description=AI Trap
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/trap
+Restart=on-failure
+User=trap
+ExecStart=/home/trap/start.sh
+Group=trap
+
+[Install]
+WantedBy=multi-user.target

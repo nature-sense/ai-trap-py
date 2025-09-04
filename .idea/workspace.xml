@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6ce7a0cd-26d9-4b78-a378-b0d5bb950d3a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/trap/app_root/app_root.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trap/cameras/arducam_hq/camera_ahq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trap/cameras/picam3/camera_picam3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trap/sessions_cache/sessions_cache.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trap/workflow/camera_workflow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/forwardedPorts.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/yolo-trap-py.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/cameras/camera.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/camera_ahq.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/camera_flow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/camera_picam3.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/detect_flow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/detections_cache.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/frame_publisher.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/preview_flow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera_process/process.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/process.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/proto/generate.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/proto/trap_protocol.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/session_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/sessions_cache.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/trap_protocol_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_process/trap_protocol_server.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/install.sh" beforeDir="false" afterPath="$PROJECT_DIR$/install.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/active_flow.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/control_messages.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/detection_metadata.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/sessions_cache/detection_metadata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/ipc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/ipc_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/proto/generate.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/proto/ipc.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ipc/session_messages.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/network_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/network/network_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/images/4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/metadata/3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042138/metadata/4.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/images/4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/metadata/3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042208/metadata/4.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/images/4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/metadata/3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822042713/metadata/4.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/images/4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/metadata/3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044427/metadata/4.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/images/4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/metadata/3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250822044446/metadata/4.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings/settings_database.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings/settings_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streamer_process/process.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/streamer_process/streamer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/websocket/proto/generate.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/websocket/websocket_messages.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolo_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/yolo_main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="32E7LdtNJ8FEABKLToIO12BSwWl" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
+      <window_info id="Commit" order="1" weight="0.25" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Problems" order="1" />
+      <window_info anchor="bottom" id="Problems View" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="3" />
+      <window_info anchor="bottom" id="Services" order="4" />
+      <window_info anchor="bottom" id="Python Packages" order="5" weight="0.1" />
+      <window_info anchor="bottom" id="Python Console" order="6" weight="0.1" />
+      <window_info anchor="right" content_ui="combo" id="Notifications" order="0" weight="0.25" />
+      <window_info anchor="right" id="AIAssistant" order="1" weight="0.25" />
+      <window_info anchor="right" id="Database" order="2" weight="0.25" />
+      <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.25" />
+      <window_info anchor="right" id="Plots" order="5" weight="0.1" />
+    </layout>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.515" />
+        <option value="bundled-python-sdk-7e47963ff851-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.515" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6ce7a0cd-26d9-4b78-a378-b0d5bb950d3a" name="Changes" comment="" />
+      <created>1756973829220</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1756973829220</updated>
+      <workItem from="1756973831235" duration="75000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

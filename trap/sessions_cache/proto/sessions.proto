@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message SessionMsg {
+  string session = 1;
+}
+
+message SessionDetailsMsg {
+  string session = 1;
+  int32 detections = 2;
+}
+
+message DetectionMsg {
+  string session = 1;
+  int32 detection = 2;
+  int64 created = 3;
+  int64 updated = 4;
+  float score = 5;
+  int32 clazz = 6;
+  int32 width = 7;
+  int32 height = 8;
+  optional bytes image = 9;
+}

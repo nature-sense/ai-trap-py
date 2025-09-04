@@ -1,0 +1,23 @@
+description: Ultralytics YOLO11n model trained on /Users/steve/datasets/Insect_Detect_detection.v5-insect_detect_raw_4k.yolov11/configuration.yaml
+author: Ultralytics
+date: '2025-07-24T09:47:09.949080'
+version: 8.3.168
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 32
+task: detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: fly
+  1: hbee
+  2: hovfly
+  3: other
+  4: shadow
+  5: wasp
+args:
+  batch: 1
+  half: false
+channels: 3

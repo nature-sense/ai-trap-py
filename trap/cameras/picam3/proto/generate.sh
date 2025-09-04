@@ -1,0 +1,1 @@
+protoc --python_out=.. picam3.proto

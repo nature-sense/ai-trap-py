@@ -7,9 +7,9 @@ from dataclasses import dataclass
 from fsspec.utils import atomic_write
 from strong_typing.serialization import object_to_json, json_to_object
 
-from trap.websocket.protobuf_message import ProtobufMessage
-from trap.websocket.websocket_service import ProtocolComponent
-from trap.settings import settings_pb2
+from trap.websocket.protobuf_message import ProtobufMsg
+from trap.settings.proto import settings_pb2
+from trap.websocket.protocol_component import ProtocolComponent
 
 SETTINGS_DATABASE = "configuration/settings.db"
 
@@ -24,7 +24,7 @@ class Settings :
 
     @staticmethod
     def from_proto(proto):
-        s = settings_pb2.SettingsMsg()
+        s = settings_pb2.Settings()
         s.ParseFromString(proto)
         return Settings(
             s.trap_name,
@@ -35,7 +35,7 @@ class Settings :
             s.min_score
         )
     def to_proto(self):
-        s = settings_pb2.SettingsMsg()
+        s = settings_pb2.Settings()
         s.trap_name = self.trap_name
         s.wifi_ssid = self.wifi_ssid
         s.wifi_password = self.wifi_password
@@ -67,7 +67,7 @@ class SettingsDatabase(ProtocolComponent) :
         )
         self.write_settings(self.settings)
 
-    async def run_database_task(self):
+    async def run_settings_task(self):
         self.logger.debug("Starting settings database task....")
 
         await asyncio.gather(self.websocket_listener_task())
@@ -78,20 +78,20 @@ class SettingsDatabase(ProtocolComponent) :
     #  - set.settings : Set the settings onject
     # ==========================================================================================
     async def websocket_listener_task(self):
-        self.websocket.subscribe_message("get.settings", self.protocol_in_channel)
-        self.websocket.subscribe_message("get.settings", self.protocol_in_channel)
+        self.websocket.subscribe_message("settings.get", self.protocol_in_channel)
+        self.websocket.subscribe_message("settings.set", self.protocol_in_channel)
         await self.protocol_in_channel.subscribe(self.handle_message)
 
-    async def handle_message(self, message: ProtobufMessage):
-        if message.identifier == "get.settings":
+    async def handle_message(self, message: ProtobufMsg):
+        if message.identifier == "settings.get":
             settings_proto = self.settings.to_proto()
-            self.protocol_out_channel.publish(ProtobufMessage("settings", settings_proto))
+            await self.protocol_out_channel.publish(ProtobufMsg("settings", settings_proto))
 
-        elif message.identifier == "set.settings":
+        elif message.identifier == "settings.set":
             settings = Settings.from_proto(message.protobuf)
             self.write_settings(settings)
             settings_proto = self.settings.to_proto()
-            self.protocol_out_channel.publish(ProtobufMessage("settings", settings_proto))
+            await self.protocol_out_channel.publish(ProtobufMsg("settings", settings_proto))
 
     def write_settings(self, settings):
         with atomic_write(self.path, "w") as f:

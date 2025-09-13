@@ -7,7 +7,7 @@ from libcamera import controls
 from trap.cameras.camera import Camera
 from bidict import bidict
 
-from trap.cameras.picam3 import picam3_pb2
+from trap.cameras.picam3.proto import picam3_pb2
 
 AUTOFOCUS_MODE = "autofocusMode"
 MANUAL_FOCUS = "manualFocus"
@@ -19,6 +19,7 @@ class AutofocusMode(Enum):
     CONTINUOUS = 1,
     TRIGGERED = 2
 
+
 class Picam3ControlModel :
     def __init__(self, mode, position):
         self.mode = mode
@@ -27,9 +28,7 @@ class Picam3ControlModel :
 
 class CameraPicam3(Camera) :
     def __init__(self, channels, websocket):
-        super().__init__()
-        self.channels = channels
-        self.websocket = websocket
+        super().__init__(channels, websocket)
         self.autofocus_mode = AutofocusMode.CONTINUOUS
         self.requested_focus_mode = None
         self.control_model = None
@@ -43,36 +42,44 @@ class CameraPicam3(Camera) :
             picam3_pb2.AutofocusMode.triggered  : controls.AfModeEnum.Auto
         })
 
+    async def run_tasks(self):
+        await asyncio.gather(self.websocket_listener_task())
+
     def setup(self, picam2, camera_config) :
         self.picam2 = picam2
         self.picam2.start(camera_config)
         self.picam2.set_controls({"AfMode": controls.AfModeEnum.Continuous})
 
     async def websocket_listener_task(self):
-        await self.websocket.subscribe_message("picam3.mode.set", self.protocol_in_channel)
-        await self.websocket.subscribe_message("picam3.position.set", self.protocol_in_channel)
-        await self.websocket.subscribe_message("picam3.focus.trigger", self.protocol_in_channel)
+        self.websocket.subscribe_message("picam3.mode.set", self.protocol_in_channel)
+        self.websocket.subscribe_message("picam3.position.set", self.protocol_in_channel)
+        self.websocket.subscribe_message("picam3.focus.trigger", self.protocol_in_channel)
         await self.protocol_in_channel.subscribe(self.handle_message)
 
     async def handle_message(self, message):
         if message.identifier == "picam3.mode.set":
-            msg = picam3_pb2.SetModeMsg()
+            msg = picam3_pb2.SetMode()
             msg.ParseFromString(message.protobuf)
             af_mode = self.modes[msg.mode]
             async with self.lock:
                 self.command_queue.append((AUTOFOCUS_MODE, af_mode))
 
         elif message.identifier == "picam3.position.set":
-            msg = picam3_pb2.SetPositionMsg()
+            msg = picam3_pb2.SetPosition()
             msg.ParseFromString(message.protobuf)
+            self.logger.debug(f"POSITION {msg.position}")
             async with self.lock:
-                async with self.lock :
-                    self.command_queue.append((MANUAL_FOCUS, msg.position))
+                self.command_queue.append((MANUAL_FOCUS, msg.position))
 
         elif message.identifier == "picam3.focus.trigger":
             async with self.lock:
                 self.command_queue.append((TRIGGER_AUTOFOCUS, None))
 
+    # =====================================================================
+    # control_camera()
+    # apply autofocus mode or lens position changes
+    # called from within the main camera loop
+    # =====================================================================
     async def control_camera(self):
         async with self.lock :
             self.logger.debug(f"Control camera {len(self.command_queue)} commands")
@@ -84,32 +91,25 @@ class CameraPicam3(Camera) :
                     self.picam2.set_controls({"AfMode": control_mode})
 
                 elif cmd[0] == MANUAL_FOCUS:
-                    distance = cmd[1]
-                    self.picam2.set_controls({"LensPosition": distance})
+                    position = cmd[1]
+                    self.logger.debug(f"Lens position = {position}")
+                    self.picam2.set_controls({"LensPosition": position})
 
                 elif cmd[0] == TRIGGER_AUTOFOCUS:
                     self.picam2.autofocus_cycle(wait=False)
 
             self.command_queue.clear()
 
-    async def process_metadata(self, metadata):
-        afState = metadata["AfState"]
-        lensPosition = metadata["LensPosition"]
-
-        if self.control_model is None :
-            self.control_model = Picam3ControlModel(afState, lensPosition)
-            await self.publish_state()
-
-        elif self.control_model.mode != afState or self.control_model.position != lensPosition :
-            self.control_model.mode = afState
-            self.control_model.position = lensPosition
-            await self.publish_state()
-
+    async def process_frame(self, metadata, frame):
         self.logger.debug(metadata)
 
-    async def publish_state(self):
-        msg = picam3_pb2.StateMsg()
-        msg.mode = self.modes.inverse[self.control_model.mode]
-        msg.position = self.control_model.position
-        proto = msg.SerializeToString()
-        await self.publish_proto("picam3.state", proto)
+        af_state = metadata["AfState"]
+        lens_position = metadata["LensPosition"]
+
+        msg = picam3_pb2.Frame()
+        metadata = picam3_pb2.FrameMetadata()
+        metadata.mode = self.modes.inverse[af_state]
+        metadata.position = lens_position
+        msg.metadata.CopyFrom(metadata)
+        msg.frame = frame
+        await self.publish_proto("picam3.frame", msg)

@@ -6,11 +6,11 @@ import os
 from datetime import datetime
 
 from trap.channels.channels_service import ChannelsService
-from trap.mjpeg_stream.mjpeg_stream_service import MjpegStreamService
-from trap.sessions_cache.sessions_cache import SessionsCache
+from trap.sessions.sessions_cache import SessionsCache
 from trap.bluetooth.bluetooth_service import BluetoothService
 from trap.settings.settings_database import SettingsDatabase
 from trap.websocket.websocket_service import WebsocketServer
+from trap.workflow.camera_workflow import CameraWorkflow
 
 SESSIONS_DIRECTORY = "./sessions"
 CONFIG_FILE = "configuration/config.ini"
@@ -68,12 +68,10 @@ class AppRoot:
 
         self.channels  = ChannelsService()
         self.bluetooth = BluetoothService(self.configuration) #config
-        self.streaming = MjpegStreamService(self.configuration, self.channels) #config channels
         self.websocket = WebsocketServer(self.configuration, self.channels) #config, channels
         self.settings  = SettingsDatabase(self.configuration, self.channels, self.websocket) #channel,websocket,config
         self.sessions  = SessionsCache(self.configuration, self.channels, self.settings, self.websocket) #config settings websocket
-
-        #self.workflow  = CameraWorkflow(self)
+        self.workflow  = CameraWorkflow(self.configuration, self.channels, self.settings, self.websocket)
 
 
     async def run_trap(self):
@@ -81,9 +79,9 @@ class AppRoot:
         await asyncio.gather(
             self.bluetooth.run_bluetooth_task(),
             self.websocket.run_websocket_task(),
-            self.streaming.run_streaming_task(),
+            self.workflow.run_workflow_task(),
             self.sessions.run_cache_task(),
-            self.settings.run_database_task(),
+            self.settings.run_settings_task(),
         )
 
 

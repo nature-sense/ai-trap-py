@@ -1,13 +1,16 @@
+import logging
 from asyncio import Queue
 from trap.channels.channel import Channel
 
 
 class ChannelsService :
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         self.channels = {}
         self.queues = {}
 
     def get_channel(self, channel_name):
+        self.logger.debug(f"get_channel {channel_name}" )
         if channel_name in self.channels:
             return self.channels[channel_name]
         else:

@@ -2,23 +2,11 @@ import asyncio
 import logging
 from abc import ABC
 
-from aioreactive import AsyncAnonymousObserver
 from websockets import ConnectionClosedOK
 from websockets.asyncio.server import serve
 
-from trap.websocket import protocol_pb2
-from trap.websocket.protobuf_message import ProtobufMessage
-
-class ProtocolComponent(ABC) :
-    def __init__(self, channels) :
-        self.channels = channels
-        self.protocol_in_channel = channels.get_channel(__class__.__name__)
-        self.protocol_out_channel = channels.get_channel('protocol_send')
-
-
-    async def publish_proto(self, identifier, proto):
-        msg = ProtobufMessage(identifier, proto)
-        await self.protocol_out_channel.publish(msg)
+from trap.websocket.proto import protocol_pb2
+from trap.websocket.protobuf_message import ProtobufMsg
 
 class WebsocketServer :
     def __init__(self, config, channels ) :
@@ -28,6 +16,7 @@ class WebsocketServer :
         self.tasks = []
         self.websocket = None
         self.logger = logging.getLogger(__name__)
+        self.connection_state = self.channels.get_channel("connection_state")
 
     async def run_websocket_task(self) :
         self.logger.debug("Starting websocket server task....")
@@ -42,41 +31,59 @@ class WebsocketServer :
     async def handler(self, websocket):
         self.websocket = websocket
 
-        self.logger.debug(f"creating websocket task")
+        self.logger.debug(f"creating websocket incoming task")
         incom_task = asyncio.create_task(self.incoming_task())
         await incom_task  # exits when socket gone
         self.websocket = None
 
     async def outgoing_task(self) :
+        logging.debug("Starting websocket outgoing task....")
+
         async def handle_message(m):
-            pm = protocol_pb2.ProtocolMsg()
-            pm.identifier = m.identifier
-            pm.protobuf = m.protobuf
-            if self.websocket is not None:
-                self.websocket.send(pm.SerializeToString())
-        await self.channels.get_channel("WebsocketServer :: publish_message").subscribe(handle_message)
+            pm = protocol_pb2.ProtobufMessage()
+            try :
+                logging.debug(f"Sending message {pm.identifier}")
+                pm.identifier = m.identifier
+                pm.protobuf = m.protobuf
+                if self.websocket is not None:
+                    await self.websocket.send(pm.SerializeToString())
+            except Exception as e :
+                self.logger.error(f"Failed to send message {pm.identifier}: {e}")
+
+        await self.channels.get_channel("publish_message").subscribe(handle_message)
 
     async def incoming_task(self):
         self.logger.debug("Incoming task started")
-
         try:
             while True:
                 self.logger.debug("Waiting for message...")
                 proto = await self.websocket.recv(decode = False)
-                pm = protocol_pb2.ProtocolMsg()
+                pm = protocol_pb2.ProtobufMessage()
                 pm.ParseFromString(proto)
 
-                msg = ProtobufMessage(pm.identifier, pm.protobuf)
-                channel = self.subscriptions[msg.identifier]
+                self.logger.debug(f"Received {pm.identifier}")
+
+                msg = ProtobufMsg(pm.identifier, pm.protobuf)
+                channel = self.subscriptions.get(msg.identifier)
                 if channel is not None:
-                    channel.asend(msg)
+                    self.logger.debug(f"Forwarding message {msg.identifier}")
+                    await channel.publish(msg)
+                else :
+                    self.logger.warn(f"No subscription for {pm.identifier}")
+
 
         except ConnectionClosedOK :
             self.logger.debug("Connection closed")
+            await self.connection_state.publish(False)
+
         except Exception as e:
+            self.logger.debug("Connection closed")
+            await self.connection_state.publish(False)
             self.logger.warn(f"Error in incoming_task {e}")
 
     def subscribe_message(self, identifier, channel):
-        self.subscriptions[identifier] = self.channels.get_channel(channel)
+        self.logger.debug(f"Subscribed to {identifier}")
+
+        self.subscriptions[identifier] = channel
 
 

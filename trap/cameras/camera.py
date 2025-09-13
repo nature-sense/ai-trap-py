@@ -1,11 +1,17 @@
 from abc import ABC, abstractmethod
 
-from trap.websocket.websocket_service import ProtocolComponent
+from trap.websocket.protocol_component import ProtocolComponent
 
 
-class Camera(ABC, ProtocolComponent) :
-    def __init__(self):
+class Camera(ProtocolComponent) :
+    def __init__(self, channels, websocket):
+        super().__init__(channels)
+        self.websocket = websocket
         self.picam2 = None
+
+    @abstractmethod
+    async def run_tasks(self):
+        pass
 
     @abstractmethod
     def setup(self, picam2, camera_config) :
@@ -15,14 +21,11 @@ class Camera(ABC, ProtocolComponent) :
     async def websocket_listener_task(self):
         pass
 
-    @abstractmethod
-    def handle_control_cmds(self, control_cmds) :
-        pass
 
     @abstractmethod
     def control_camera(self) :
         pass
 
     @abstractmethod
-    def process_metadata(self, metadata):
+    def process_frame(self, metadata, frame):
         pass

@@ -3,3 +3,4 @@ protoc --python_out=trap/sessions proto/sessions.proto
 protoc --python_out=trap/settings proto/settings.proto
 protoc --python_out=trap/websocket proto/protocol.proto
 protoc --python_out=trap/workflow proto/control.proto
+protoc --python_out=trap/network proto/network.proto

@@ -1,63 +1,65 @@
-import subprocess
+import logging
 
-# nmcli d wifi connect my_wifi password <password>
-#sudo nmcli r wifi on
-#nmcli -t radio wifi -< enabled/disabled
+from trap.network.network_api import NetworkApi
+from trap.network.network_database import NetworkDatabase, NetworkSettings
+from trap.network.proto import network_pb2
 
-def get_wifi_ssid():
-    try:
-        process = subprocess.run(['nmcli', '-t', '-f', 'ACTIVE,SSID', 'dev', 'wifi'],
-                                 capture_output=True, text=True, check=True)
-        output_lines = process.stdout.strip().split('\n')
-        for line in output_lines:
-            if line.startswith('yes:'):
-                return line.split(':', 1)[1]  # Return the SSID
-        return None  # No active Wi-Fi found
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing nmcli: {e}")
-        return None
 
-def set_wifi_state(state) :
-    try:
-        if state :
-            subprocess.run(['sudo', 'nmcli', 'r', 'wifi', 'on'],
-                                 capture_output=True, text=True, check=True)
-        else :
-            subprocess.run(['sudo', 'nmcli', 'r', 'wifi', 'off'],
-                                     capture_output=True, text=True, check=True)
+class NetworkManager() :
+    def __init__(self, config, channels, bluetooth):
+        self.config = config
+        self.channels = channels
 
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing nmcli: {e}")
-        return None
 
-def get_wifi_state() :
-    try:
-        process = subprocess.run(['nmcli', '-t', 'radio', 'wifi'],
-                                 capture_output=True, text=True, check=True)
-        output_lines = process.stdout.strip().split('\n')
-        for line in output_lines:
-            if line.startswith('enabled'):
-                return True
-            else :
-                return False
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing nmcli: {e}")
-        return None
+        # Find the initial state
+        #self.wifi_status.active = NetworkApi.get_wifi_state()
+        #curr_net = NetworkApi.get_current_network()
 
-def id_eifi_connected() :
-    #nmcli -t connection show --active
-    #preconfigured:60d6692b-caef-4531-ae7a-236aeef97435:802-11-wireless:wlan0
-    #lo:60e8a9c1-baaf-4297-87fe-b2a3c8df49f6:loopback:lo
+        self.settings = self.database.read_settings()
+        if self.settings is None:
 
-    try:
-        process = subprocess.run(['nmcli', '-t', 'connection', 'show', '--active'],
-                                 capture_output=True, text=True, check=True)
-        output_lines = process.stdout.strip().split('\n')
-        for line in output_lines:
-            parts = line.split(':')
-            if parts[2] == "wlan0":
-                return True
-        return False
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing nmcli: {e}")
-        return None
+            if self.settings is None:
+                if NetworkApi.get_wifi_state() is True :
+                    # ------------------------------------------------------------------
+                    # Get the current network and create an entry for it in the settings
+                    # Create an entru for the hotspot in the settings
+                    # ------------------------------------------------------------------
+                    curr_net = NetworkApi.get_current_connection()
+                    if curr_net is not None:
+                        hotspot_name = 'hotspot'
+                        hotspot_ssid = self.config.node_name
+                        hotspot_password = "naturesense"
+                        hotspot_uuid = NetworkApi.add_hotspot_config(hotspot_name, hotspot_ssid, hotspot_password)
+
+                        network_name = curr_net[0]
+                        network_ssid = curr_net[1]
+                        network_uuid = curr_net[2]
+
+                        self.settings = NetworkSettings(
+                            hotspot_name,
+                            hotspot_ssid,
+                            hotspot_uuid,
+                            network_name,
+                            network_ssid,
+                            network_uuid
+                        )
+                        self.database.write_settings(self.settings)
+                    else :
+                        logging.error("No wifi connected. Cannot initialise the network settings")
+                else :
+                    logging.error("Wifi is off. Cannot initialise the network settings")
+
+    def start_hotspot(self):
+        NetworkApi.configuration_up(self.settings.hotspot_uuid)
+
+    def stop_hotspot(self):
+        NetworkApi.configuratiom_down(self.settings.hotspot_uuid)
+
+    def start_network(self):
+        NetworkApi.configuration_up(self.settings.network_uuid)
+
+    def stop_network(self):
+        NetworkApi.configuratiom_down(self.settings.network_uuid)
+
+
+

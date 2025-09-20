@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 
 from trap.channels.channels_service import ChannelsService
+from trap.network.network_manager import NetworkManager
 from trap.sessions.sessions_cache import SessionsCache
 from trap.bluetooth.bluetooth_service import BluetoothService
 from trap.settings.settings_database import SettingsDatabase
@@ -20,13 +21,13 @@ def session_to_datetime(session) :
     return datetime.strptime(session,session_format)
 
 class Configuration :
-    def __init__(self, node_name, camera_type, settings_path, sessions_path, websocket_port, streaming_port ):
+    def __init__(self, node_name, camera_type, settings_path, sessions_path, websocket_port, bluetooth_service ):
         self.node_name = node_name
         self.camera_type = camera_type
         self.settings_path = settings_path
         self.sessions_path = sessions_path
         self.websocket_port = websocket_port
-        self.streaming_port = streaming_port
+        self.bluetooth_service = bluetooth_service
 
 class ConfigFile :
 
@@ -60,14 +61,15 @@ class AppRoot:
         self.configuration = Configuration(
             os.uname().nodename.upper(),
             self.config_file.read_value("cameras", "picamera3"),
-            self.config_file.read_value("settingsPath", "./configuration/settings.db"),
+            self.config_file.read_value("settingsPath", "./configuration"),
             self.config_file.read_value("sessionsPath", "./sessions"),
             self.config_file.read_int_value("websocket", 8096),
-            self.config_file.read_int_value("streamingPort", 8097)
+            self.config_file.read_value("bluetoothService", "213e313b-d0df-4350-8e5d-ae657962bb56"),
         )
 
         self.channels  = ChannelsService()
-        self.bluetooth = BluetoothService(self.configuration) #config
+        self.bluetooth = BluetoothService(self.configuration, self.channels) #config
+        self.network   = NetworkManager(self.configuration, self.channels, self.bluetooth)
         self.websocket = WebsocketServer(self.configuration, self.channels) #config, channels
         self.settings  = SettingsDatabase(self.configuration, self.channels, self.websocket) #channel,websocket,config
         self.sessions  = SessionsCache(self.configuration, self.channels, self.settings, self.websocket) #config settings websocket

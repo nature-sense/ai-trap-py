@@ -16,9 +16,6 @@ SETTINGS_DATABASE = "configuration/settings.db"
 @dataclass
 class Settings :
     trap_name : str
-    wifi_ssid : str
-    wifi_password : str
-    wifi_enabled : bool
     max_sessions : int
     min_score : float
 
@@ -30,16 +27,10 @@ class Settings :
             s.trap_name,
             s.wifi_ssid,
             s.wifi_password,
-            s.wifi_enabled,
-            s.max_sessions,
-            s.min_score
         )
     def to_proto(self):
         s = settings_pb2.Settings()
         s.trap_name = self.trap_name
-        s.wifi_ssid = self.wifi_ssid
-        s.wifi_password = self.wifi_password
-        s.wifi_enabled = self.wifi_enabled
         s.max_sessions = self.max_sessions
         s.min_score = self.min_score
         return s.SerializeToString()
@@ -51,21 +42,14 @@ class SettingsDatabase(ProtocolComponent) :
         super().__init__(channels)
         self.logger = logging.getLogger(name=__name__)
 
-        self.path = config.settings_path
+        self.path = f"{config.settings_path}/settings.db"
         self.websocket = websocket
 
         self.on_changed = None
         self.settings = self.read_settings()
         if self.settings is None:
-            self.settings = Settings(
-            "",  # trap_name
-            "",  # eifi_ssid,
-            "",  # wifi_password,
-            True,  # wifi_enabled,
-            5,  # max_sessions,
-            0.75  # min_score
-        )
-        self.write_settings(self.settings)
+            self.settings = Settings("", 5, 0.75)
+            self.write_settings(self.settings)
 
     async def run_settings_task(self):
         self.logger.debug("Starting settings database task....")

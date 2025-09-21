@@ -13,8 +13,8 @@ class NetworkManager() :
         if wifi_network is None :
             exit(0)
 
-        if wifi_network.autostart :
-            
+        #if wifi_network.autostart :
+
 
 
         # Determine thew current netork state

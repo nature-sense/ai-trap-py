@@ -4,22 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ce7a0cd-26d9-4b78-a378-b0d5bb950d3a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/trap/bluetooth/bluetooth_message.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trap/network/network_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trap/network/network_database.py" afterDir="false" />
+    <list default="true" id="6ce7a0cd-26d9-4b78-a378-b0d5bb950d3a" name="Changes" comment="Removed network">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configuration/settings.db" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/settings.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate-proto.sh" beforeDir="false" afterPath="$PROJECT_DIR$/generate-proto.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913155535/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913155535/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913155535/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913155535/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913155535/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913155535/metadata/3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913160104/images/1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913160104/images/2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913160104/images/3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913160104/metadata/1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913160104/metadata/2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sessions/20250913160104/metadata/3.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/trap/app_root/app_root.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/app_root/app_root.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trap/bluetooth/bluetooth_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/bluetooth/bluetooth_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trap/channels/channel.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/channels/channel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trap/network/network_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/network/network_api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trap/network/network_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/network/network_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trap/settings/proto/settings_pb2.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/settings/proto/settings_pb2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trap/settings/settings_database.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/settings/settings_database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trap/workflow/camera_workflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/trap/workflow/camera_workflow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +37,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -53,7 +56,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.camera_workflow.executor": "Run",
     "Python.settings_database.executor": "Run",
-    "Python.trap_main.executor": "Run",
+    "Python.trap_main.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -76,24 +79,24 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Learn" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2606582" />
-      <window_info id="Commit" order="1" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24100968" />
+      <window_info id="Commit" order="1" weight="0.2606582" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
       <window_info anchor="bottom" id="TODO" />
       <window_info anchor="bottom" id="File Transfer" />
       <window_info anchor="bottom" id="HfCacheToolWindow" />
-      <window_info anchor="bottom" id="Version Control" order="0" />
+      <window_info anchor="bottom" id="Version Control" order="0" weight="0.35844016" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" weight="0.32972136" />
-      <window_info anchor="bottom" id="Terminal" order="3" weight="0.32959402" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.35844016" />
       <window_info anchor="bottom" id="Services" order="4" />
       <window_info anchor="bottom" id="Python Packages" order="5" weight="0.1" />
       <window_info anchor="bottom" id="Python Console" order="6" weight="0.1" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.3167735" />
-      <window_info anchor="bottom" id="Find" order="8" weight="0.3580715" />
-      <window_info anchor="bottom" id="Debug" order="9" weight="0.3167735" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.47596154" />
+      <window_info anchor="bottom" id="Find" order="8" weight="0.35844016" />
+      <window_info active="true" anchor="bottom" id="Debug" order="9" visible="true" weight="0.47596154" />
       <window_info anchor="right" id="Endpoints" />
       <window_info anchor="right" id="documentation.v2" show_stripe_button="false" side_tool="true" />
       <window_info anchor="right" id="Coverage" side_tool="true" />
@@ -183,12 +186,71 @@
       <workItem from="1757878144237" duration="8578000" />
       <workItem from="1757963622755" duration="21495000" />
       <workItem from="1758273340937" duration="8724000" />
-      <workItem from="1758303863406" duration="10327000" />
+      <workItem from="1758303863406" duration="12885000" />
+      <workItem from="1758400187383" duration="617000" />
+      <workItem from="1758400948950" duration="15796000" />
     </task>
+    <task id="LOCAL-00001" summary="Removed network">
+      <option name="closed" value="true" />
+      <created>1758390430319</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1758390430319</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Removed network">
+      <option name="closed" value="true" />
+      <created>1758390672761</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1758390672761</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="97288f54-aa76-4ea7-89f9-118ff609e05c" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="97288f54-aa76-4ea7-89f9-118ff609e05c">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$/proto" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Removed network" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed network" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -227,7 +289,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ai_trap_py$trap_main.coverage" NAME="trap_main Coverage Results" MODIFIED="1758388057801" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ai_trap_py$trap_main.coverage" NAME="trap_main Coverage Results" MODIFIED="1758471615954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ai_trap_py$camera_workflow.coverage" NAME="camera_workflow Coverage Results" MODIFIED="1757593202935" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/trap/workflow" />
   </component>
 </project>

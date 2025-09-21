@@ -22,6 +22,13 @@ class ConectionState(Enum) :
     full = "full"
     unknown = "unknown"
 
+class WifiConfiguration :
+    def __init__(self, name, uuid, autostart, active):
+        self.name = name
+        self.uuid = uuid
+        self.autostart = autostart
+        self.actice = active
+
 class NetworkApi :
     # =====================================================
     # Add a wifi network defined by name, ssid and password
@@ -104,17 +111,43 @@ class NetworkApi :
 
     # ================================================
     # List wifi configurations
+    #  nmcli -t -f NAME,UUiD,AUTOCONNECT,ACTIVE,DEVICE,STATE,TYPE  connection show
     # ================================================
     @staticmethod
     def list_wifi_configurations() :
-        process = subprocess.run(['nmcli', '-t', 'connection', 'show'],
-                                 capture_output=True, text=True, check=True)
+        process = subprocess.run([
+            'nmcli',
+            '-t',
+            '-f',
+            'NAME,UUiD,AUTOCONNECT,TYPE,DEVICE',
+            'connection',
+            'show'],
+            capture_output=True, text=True, check=True)
         output_lines = process.stdout.strip().split('\n')
-        networks = []
+        wifi_cfg = {}
         for line in output_lines:
             parts = line.split(':')
-            if len(parts) == 4 and parts[3] == '802-11-wireless':
-                networks.append(parts[0])
+            if len(parts) == 5 and parts[3] == '802-11-wireless':
+                autostart = parts[2] == 'yes'
+                active = parts[4] != ""
+                wifi_cfg[parts[0]] = WifiConfiguration(parts[0], parts[1], autostart, active)
+
+        return wifi_cfg
+
+    @staticmethod
+    def set_autostart(uuid, state) :
+        value = 'off'
+        if state :
+            value = 'on'
+
+        process = subprocess.run([
+            'nmcli',
+            'connection',
+            'modify',
+            f'{uuid}',
+            'connection.autoconnect',
+            f'{state}'
+        ], capture_output=True, text=True, check=True)
 
     # ================================================
     # get the internet connection state one of:

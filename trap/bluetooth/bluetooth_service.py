@@ -20,6 +20,6 @@ class BluetoothService():
         loop = asyncio.get_running_loop()
         self.bluetooth_server = BlessServer(name=self.node_name, loop=loop)
         await self.bluetooth_server.add_new_service(self.service)
-
+        await self.bluetooth_server.start()
         self.logger.debug("BluetoothService :: Bluetooth advertising")
         await asyncio.Future()

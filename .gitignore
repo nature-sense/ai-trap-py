@@ -1,0 +1,12 @@
+.idea
+.venv
+venv
+sessions
+configuration
+model
+*.jpg
+.DS_Store
+__pycache__
+ComputeLibrary
+.cache
+__pycache__

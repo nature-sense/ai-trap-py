@@ -69,12 +69,13 @@ class AppRoot:
 
         self.channels  = ChannelsService()
         self.bluetooth = BluetoothService(self.configuration, self.channels) #config
-        self.network   = NetworkManager(self.configuration, self.channels, self.bluetooth)
+        #self.network   = NetworkManager(self.configuration, self.channels)
         self.websocket = WebsocketServer(self.configuration, self.channels) #config, channels
         self.settings  = SettingsDatabase(self.configuration, self.channels, self.websocket) #channel,websocket,config
         self.sessions  = SessionsCache(self.configuration, self.channels, self.settings, self.websocket) #config settings websocket
         self.workflow  = CameraWorkflow(self.configuration, self.channels, self.settings, self.websocket)
 
+        self.network = NetworkManager(self.configuration, self.channels)
 
     async def run_trap(self):
         logging.debug("AppRoot :: Run trap...")

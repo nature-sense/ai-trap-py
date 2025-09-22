@@ -9,4 +9,4 @@ model
 __pycache__
 ComputeLibrary
 .cache
-__pycache__
+**/__pycache__/

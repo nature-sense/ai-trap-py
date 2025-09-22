@@ -107,7 +107,7 @@ class CameraPicam3(Camera) :
 
         msg = picam3_pb2.Frame()
         metadata = picam3_pb2.FrameMetadata()
-        metadata.afState = self.modes.inverse[controls.AfStateEnum(af_state)]
+        metadata.afState = self.af_states.inverse[controls.AfStateEnum(af_state)]
         metadata.position = lens_position
         msg.metadata.CopyFrom(metadata)
         msg.frame = frame

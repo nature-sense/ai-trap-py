@@ -1,4 +1,3 @@
-.idea
 .venv
 venv
 sessions
@@ -9,4 +8,4 @@ model
 __pycache__
 ComputeLibrary
 .cache
-**/__pycache__/
+.idea

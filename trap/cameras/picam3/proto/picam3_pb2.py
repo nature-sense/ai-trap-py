@@ -13,21 +13,23 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12proto/picam3.proto\"?\n\rFrameMetadata\x12\x1c\n\x04mode\x18\x01 \x01(\x0e\x32\x0e.AutofocusMode\x12\x10\n\x08position\x18\x02 \x01(\x01\"\'\n\x07SetMode\x12\x1c\n\x04mode\x18\x01 \x01(\x0e\x32\x0e.AutofocusMode\"\x1f\n\x0bSetPosition\x12\x10\n\x08position\x18\x01 \x01(\x01\"8\n\x05\x46rame\x12 \n\x08metadata\x18\x01 \x01(\x0b\x32\x0e.FrameMetadata\x12\r\n\x05\x66rame\x18\x02 \x01(\x0c*:\n\rAutofocusMode\x12\n\n\x06manual\x10\x00\x12\x0e\n\ncontinuous\x10\x01\x12\r\n\ttriggered\x10\x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12proto/picam3.proto\"C\n\rFrameMetadata\x12 \n\x07\x61\x66State\x18\x01 \x01(\x0e\x32\x0f.AutofocusState\x12\x10\n\x08position\x18\x02 \x01(\x01\"\'\n\x07SetMode\x12\x1c\n\x04mode\x18\x01 \x01(\x0e\x32\x0e.AutofocusMode\"\x1f\n\x0bSetPosition\x12\x10\n\x08position\x18\x01 \x01(\x01\"8\n\x05\x46rame\x12 \n\x08metadata\x18\x01 \x01(\x0b\x32\x0e.FrameMetadata\x12\r\n\x05\x66rame\x18\x02 \x01(\x0c*:\n\rAutofocusMode\x12\n\n\x06manual\x10\x00\x12\x0e\n\ncontinuous\x10\x01\x12\r\n\ttriggered\x10\x02*B\n\x0e\x41utofocusState\x12\x08\n\x04idle\x10\x00\x12\x0c\n\x08scanning\x10\x01\x12\x0c\n\x08\x66ocussed\x10\x02\x12\n\n\x06\x66\x61iled\x10\x03\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.picam3_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _AUTOFOCUSMODE._serialized_start=219
-  _AUTOFOCUSMODE._serialized_end=277
+  _AUTOFOCUSMODE._serialized_start=223
+  _AUTOFOCUSMODE._serialized_end=281
+  _AUTOFOCUSSTATE._serialized_start=283
+  _AUTOFOCUSSTATE._serialized_end=349
   _FRAMEMETADATA._serialized_start=22
-  _FRAMEMETADATA._serialized_end=85
-  _SETMODE._serialized_start=87
-  _SETMODE._serialized_end=126
-  _SETPOSITION._serialized_start=128
-  _SETPOSITION._serialized_end=159
-  _FRAME._serialized_start=161
-  _FRAME._serialized_end=217
+  _FRAMEMETADATA._serialized_end=89
+  _SETMODE._serialized_start=91
+  _SETMODE._serialized_end=130
+  _SETPOSITION._serialized_start=132
+  _SETPOSITION._serialized_end=163
+  _FRAME._serialized_start=165
+  _FRAME._serialized_end=221
 # @@protoc_insertion_point(module_scope)

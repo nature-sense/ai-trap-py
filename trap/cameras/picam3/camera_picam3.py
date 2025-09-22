@@ -1,7 +1,6 @@
 import asyncio
 import logging
 from asyncio import Lock
-from enum import Enum
 
 from libcamera import controls
 from trap.cameras.camera import Camera
@@ -13,13 +12,6 @@ AUTOFOCUS_MODE = "autofocusMode"
 MANUAL_FOCUS = "manualFocus"
 TRIGGER_AUTOFOCUS = "triggerAutofocus"
 
-
-class AutofocusMode(Enum):
-    MANUAL = 0
-    CONTINUOUS = 1,
-    TRIGGERED = 2
-
-
 class Picam3ControlModel :
     def __init__(self, mode, position):
         self.mode = mode
@@ -29,7 +21,6 @@ class Picam3ControlModel :
 class CameraPicam3(Camera) :
     def __init__(self, channels, websocket):
         super().__init__(channels, websocket)
-        self.autofocus_mode = AutofocusMode.CONTINUOUS
         self.requested_focus_mode = None
         self.control_model = None
         self.command_queue = []
@@ -37,9 +28,17 @@ class CameraPicam3(Camera) :
         self.logger = logging.getLogger(name=__name__)
 
         self.modes = bidict({
+            #AfStateEnum
+    #{AfStateIdle = 0, AfStateScanning = 1, AfStateFocused = 2, AfStateFailed = 3}
             picam3_pb2.AutofocusMode.manual     : controls.AfModeEnum.Manual,
             picam3_pb2.AutofocusMode.continuous : controls.AfModeEnum.Continuous,
             picam3_pb2.AutofocusMode.triggered  : controls.AfModeEnum.Auto
+        })
+        self.af_states = bidict({
+            picam3_pb2.AutofocusState.idle : controls.AfStateEnum.Idle,
+            picam3_pb2.AutofocusState.scanning : controls.AfStateEnum.Scanning,
+            picam3_pb2.AutofocusState.focussed : controls.AfStateEnum.Focused,
+            picam3_pb2.AutofocusState.failed : controls.AfStateEnum.Failed
         })
 
     async def run_tasks(self):
@@ -108,7 +107,7 @@ class CameraPicam3(Camera) :
 
         msg = picam3_pb2.Frame()
         metadata = picam3_pb2.FrameMetadata()
-        metadata.mode = self.modes.inverse[controls.AfModeEnum(af_state)]
+        metadata.afState = self.modes.inverse[controls.AfModeEnum(af_state)]
         metadata.position = lens_position
         msg.metadata.CopyFrom(metadata)
         msg.frame = frame

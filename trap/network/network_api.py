@@ -98,11 +98,14 @@ class NetworkApi :
                 'wpa-psk',
                 'wifi-sec.psk',
                 f'\'{password}\''
+                'connection.autoconnect',
+                'no'
             ], capture_output=True, text=True, check=True)
             output_lines = process.stdout.strip().split('\n')
             for line in output_lines:
                 if 'successfully added' in line :
-                    return line[line.find('(')+1:line.find(')')]
+                    uuid = line[line.find('(')+1:line.find(')')]
+                    return WifiConfiguration(name, uuid, False, False)
             return None
 
         except subprocess.CalledProcessError as e:

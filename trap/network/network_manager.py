@@ -8,14 +8,25 @@ class NetworkManager() :
         self.config = config
         self.channels = channels
         self.wifi_cfg = NetworkApi.list_wifi_configurations()
+        self.logger = logging.getLogger(__name__)
 
+        self.wifi_network =  self.wifi_cfg.get("preconfigured")
+        self.hotspot = self.wifi_cfg.get("preconfigured")
+        #if self.hotspot is None :
+
+
+
+        #for wifi_cfg in self.wifi_cfg.values() :
+
+
+        #    if wifi_cfg.active :
+        #        self.logger.debug(f"Active wifi {wifi_cfg}")
+
+
+        # get the
         wifi_network =  self.wifi_cfg.get("preconfigured")
         if wifi_network is None :
             exit(0)
-
-        #if wifi_network.autostart :
-
-
 
         # Determine thew current netork state
         # if there is a network called 'preconfigured' with autpstart on this

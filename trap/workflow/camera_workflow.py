@@ -143,8 +143,8 @@ class CameraWorkflow(ProtocolComponent):
 
     async def workflow_task(self):
         logging.debug("Starting cameras workflow task...")
-        #while True:
-        #    await self.process_image()
+        while True:
+            await self.process_image()
 
     async def process_image(self):
 

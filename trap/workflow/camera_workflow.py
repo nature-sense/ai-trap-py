@@ -73,11 +73,14 @@ class CameraWorkflow(ProtocolComponent):
         )
 
     async def websocket_listener_task(self):
-        self.websocket.subscribe_message("detection.state.get", self.protocol_in_channel)
-        self.websocket.subscribe_message("detection.state.set", self.protocol_in_channel)
-        self.websocket.subscribe_message("preview.state.get", self.protocol_in_channel)
-        self.websocket.subscribe_message("preview.state.set", self.protocol_in_channel)
-        await self.protocol_in_channel.subscribe(self.handle_message)
+        in_channel = self.websocket.subscribe_many_messages(
+            "camera.get",
+            "detection.state.get",
+            "detection.state.set",
+            "preview.state.get",
+            "preview.state.set"
+        )
+        await in_channel.subscribe(self.handle_message)
 
     async def connection_state_listener_task(self):
         await self.connection_state.subscribe(self.handle_state)
@@ -89,17 +92,44 @@ class CameraWorkflow(ProtocolComponent):
             self.preview_state = state
 
     async def handle_message(self, message):
-        self.logger.debug(f"Received message {message.identifier}")
-        if message.identifier == "detection.state.get":
-            msg = control_pb2.State()
-            msg.state = self.detection_state
-            await self.publish_proto("detection.state", msg)
+        self.logger.debug(f"WORKFLOW Received message {message.identifier}")
+        if message.identifier == "camera.get":
+            try:
+                msg = control_pb2.CameraType()
+                msg.type = self.configuration.camera_type
+                await self.publish_proto("camera", msg)
+            except Exception as ex :
+                x=1;
+
+        elif message.identifier == "detection.state.get":
+
+            state_msg = control_pb2.StateWithSession()
+            state_msg.state = self.detection_state
+            if self.current_session is not None :
+                state_msg.session = self.current_session
+            await self.publish_proto("detection.state", state_msg)
+
 
         elif message.identifier == "detection.state.set":
             msg = control_pb2.State()
             msg.ParseFromString(message.protobuf)
-            self.detection_state = msg.state
-            await self.publish_proto("detection.state", msg)
+            if msg.state:
+                now = datetime.now()
+                self.current_session = now.strftime("%Y%m%d%H%M%S")
+                await self.channels.get_channel("session_channel").publish(
+                    SessionState(state=True, session=self.current_session))
+                state_msg = control_pb2.StateWithSession()
+                state_msg.state =True
+                state_msg.session = self.current_session
+                await self.publish_proto("detection.state", state_msg)
+                self.detection_state = True
+            else :
+                self.detection_state = False
+                self.current_session = None
+                state_msg = control_pb2.StateWithSession()
+                state_msg.state = False
+                await self.publish_proto("detection.state", state_msg)
+
 
         elif message.identifier == "preview.state.get":
             msg = control_pb2.State()
@@ -144,7 +174,7 @@ class CameraWorkflow(ProtocolComponent):
     async def workflow_task(self):
         logging.debug("Starting cameras workflow task...")
         while True:
-            await self.process_image()
+          await self.process_image()
 
     async def process_image(self):
 
@@ -164,29 +194,31 @@ class CameraWorkflow(ProtocolComponent):
                     results = await self.loop.run_in_executor(None, self.do_track, l.array)
 
                     try :
-                        img = results[0].orig_img
-                        boxes = results[0].boxes.xyxy.cpu().numpy().astype(np.int32)
-                        track_ids = [tid.item() for tid in results[0].boxes.id.int().cpu().numpy()]
-                        scores = [s.item() for s in results[0].boxes.conf.numpy()]
-                        classes = [c.item() for c in results[0].boxes.cls.numpy().astype(np.int32)]
-                        detections = zip(boxes, track_ids, scores, classes)
+                        if results[0].boxes is not None :
+                            img = results[0].orig_img
 
-                        if self.preview_state :
-                            for box, track_id, score, clazz in detections :
-                                x1, y1, x2, y2 = map(int, box)  # Convert coordinates to integers
-                                if score > min_score :
-                                    cv2.rectangle(img, (x1, y1), (x2, y2),  (24, 130, 24), 2)  # high score
-                                    cv2.putText(img, f"{track_id}/{score:.2f}", (x1, y1 -5),
-                                                     cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 0), 1)
-                                else :
-                                    cv2.rectangle(img, (x1, y1), (x2, y2),  (84, 84, 84), 1)  # low score
-                                    cv2.putText(img, f"{track_id}/{score:.2f}", (x1, y1 - 5),
-                                                    cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 0), 1)
-                            jpeg = self.to_jpeg(img)
-                            logging.debug("STREAMING FRAME WITH BOXES")
-                            await self.camera.process_frame(metadata, jpeg)
+                            boxes = results[0].boxes.xyxy.cpu().numpy().astype(np.int32)
+                            track_ids = [tid.item() for tid in results[0].boxes.id.int().cpu().numpy()]
+                            scores = [s.item() for s in results[0].boxes.conf.numpy()]
+                            classes = [c.item() for c in results[0].boxes.cls.numpy().astype(np.int32)]
+                            detections = list(zip(boxes, track_ids, scores, classes))
 
-                        await self.save_detections(m, detections, min_score)
+                            if self.preview_state :
+                                for box, track_id, score, clazz in detections :
+                                    x1, y1, x2, y2 = map(int, box)  # Convert coordinates to integers
+                                    if score > min_score :
+                                        cv2.rectangle(img, (x1, y1), (x2, y2),  (24, 130, 24), 2)  # high score
+                                        cv2.putText(img, f"{track_id}/{score:.2f}", (x1, y1 -5),
+                                                         cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 0), 1)
+                                    else :
+                                        cv2.rectangle(img, (x1, y1), (x2, y2),  (84, 84, 84), 1)  # low score
+                                        cv2.putText(img, f"{track_id}/{score:.2f}", (x1, y1 - 5),
+                                                        cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 0), 1)
+                                jpeg = self.to_jpeg(img)
+                                logging.debug("STREAMING FRAME WITH BOXES")
+                                await self.camera.process_frame(metadata, jpeg)
+
+                            await self.save_detections(m, detections, min_score)
                     except Exception as e :
                         logging.warn(f"Discarding results on error {e}")
 
@@ -207,10 +239,10 @@ class CameraWorkflow(ProtocolComponent):
 
     async def save_detections(self, frame, detections, min_score):
         try :
-            if self.current_session is None:
-                now = datetime.now()
-                self.current_session = now.strftime("%Y%m%d%H%M%S")
-                await self.channels.get_channel("session_channel").publish(SessionState(state=True, session=self.current_session))
+            #if self.current_session is None:
+            #    now = datetime.now()
+            #    self.current_session = now.strftime("%Y%m%d%H%M%S")
+            #    await self.channels.get_channel("session_channel").publish(SessionState(state=True, session=self.current_session))
 
             for box, track_id, score, clazz in detections:
                 logging.debug(f"score = {score} min-score = {min_score}")
@@ -239,7 +271,7 @@ class CameraWorkflow(ProtocolComponent):
                     image = self.to_jpeg(frame.array[y0:y1, x0:x1])
 
                     await self.channels.get_channel("detection_channel").publish(DetectionMetaDataWithImage(metadata, image))
-
+            x=0
         except Exception as e:
             logging.error(f"Failed to save detections {e}")
 

@@ -10,6 +10,7 @@ from trap.network.network_manager import NetworkManager
 from trap.sessions.sessions_cache import SessionsCache
 from trap.bluetooth.bluetooth_service import BluetoothService
 from trap.settings.settings_database import SettingsDatabase
+from trap.webdav.webdav_server import WebDavServer
 from trap.websocket.websocket_service import WebsocketServer
 from trap.workflow.camera_workflow import CameraWorkflow
 
@@ -68,6 +69,7 @@ class AppRoot:
         )
 
         self.channels  = ChannelsService()
+        self.webdav = WebDavServer()
         self.bluetooth = BluetoothService(self.configuration, self.channels) #config
         #self.network   = NetworkManager(self.configuration, self.channels)
         self.websocket = WebsocketServer(self.configuration, self.channels) #config, channels
@@ -85,6 +87,7 @@ class AppRoot:
             self.workflow.run_workflow_task(),
             self.sessions.run_cache_task(),
             self.settings.run_settings_task(),
+            #self.webdav.run_webdav_task()
         )
 
 

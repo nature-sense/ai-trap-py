@@ -5,6 +5,7 @@ from abc import ABC
 from websockets import ConnectionClosedOK
 from websockets.asyncio.server import serve
 
+from trap.channels.channel import Channel
 from trap.websocket.proto import protocol_pb2
 from trap.websocket.protobuf_message import ProtobufMsg
 
@@ -81,9 +82,16 @@ class WebsocketServer :
             await self.connection_state.publish(False)
             self.logger.warn(f"Error in incoming_task {e}")
 
-    def subscribe_message(self, identifier, channel):
+    def subscribe_one_message(self, identifier):
         self.logger.debug(f"Subscribed to {identifier}")
-
+        channel = Channel()
         self.subscriptions[identifier] = channel
+        return channel
 
+    def subscribe_many_messages(self, *args):
+        channel = Channel()
+        for ident in args :
+            self.logger.debug(f"Subscribed to {ident}")
+            self.subscriptions[ident] = channel
+        return channel
 

@@ -25,8 +25,8 @@ class Settings :
         s.ParseFromString(proto)
         return Settings(
             s.trap_name,
-            s.wifi_ssid,
-            s.wifi_password,
+            s.max_sessions,
+            s.min_score
         )
     def to_proto(self):
         s = settings_pb2.Settings()
@@ -62,9 +62,8 @@ class SettingsDatabase(ProtocolComponent) :
     #  - set.settings : Set the settings onject
     # ==========================================================================================
     async def websocket_listener_task(self):
-        self.websocket.subscribe_message("settings.get", self.protocol_in_channel)
-        self.websocket.subscribe_message("settings.set", self.protocol_in_channel)
-        await self.protocol_in_channel.subscribe(self.handle_message)
+        in_channel = self.websocket.subscribe_many_messages("settings.get","settings.set")
+        await in_channel.subscribe(self.handle_message)
 
     async def handle_message(self, message: ProtobufMsg):
         if message.identifier == "settings.get":
@@ -72,8 +71,8 @@ class SettingsDatabase(ProtocolComponent) :
             await self.protocol_out_channel.publish(ProtobufMsg("settings", settings_proto))
 
         elif message.identifier == "settings.set":
-            settings = Settings.from_proto(message.protobuf)
-            self.write_settings(settings)
+            self.settings = Settings.from_proto(message.protobuf)
+            self.write_settings(self.settings)
             settings_proto = self.settings.to_proto()
             await self.protocol_out_channel.publish(ProtobufMsg("settings", settings_proto))
 

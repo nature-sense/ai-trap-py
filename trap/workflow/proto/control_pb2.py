@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13proto/control.proto\"\x16\n\x05State\x12\r\n\x05state\x18\x01 \x01(\x08\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13proto/control.proto\"\x16\n\x05State\x12\r\n\x05state\x18\x01 \x01(\x08\"2\n\x10StateWithSession\x12\r\n\x05state\x18\x01 \x01(\x08\x12\x0f\n\x07session\x18\x02 \x01(\t\"\x1a\n\nCameraType\x12\x0c\n\x04type\x18\x01 \x01(\tb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.control_pb2', globals())
@@ -22,4 +22,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _STATE._serialized_start=23
   _STATE._serialized_end=45
+  _STATEWITHSESSION._serialized_start=47
+  _STATEWITHSESSION._serialized_end=97
+  _CAMERATYPE._serialized_start=99
+  _CAMERATYPE._serialized_end=125
 # @@protoc_insertion_point(module_scope)

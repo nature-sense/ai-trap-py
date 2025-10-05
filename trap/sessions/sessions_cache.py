@@ -153,9 +153,11 @@ class SessionsCache(ProtocolComponent):
     # ==========================================================================================
 
     async def websocket_listener_task(self):
-        self.websocket.subscribe_message("sessions", self.protocol_in_channel)
-        self.websocket.subscribe_message("session.detections", self.protocol_in_channel)
-        await self.protocol_in_channel.subscribe(self.handle_message)
+        in_channel = self.websocket.subscribe_many_messages(
+            "sessions",
+            "session.detections"
+        )
+        await in_channel.subscribe(self.handle_message)
 
 
     async def handle_message(self, message):
@@ -173,7 +175,9 @@ class SessionsCache(ProtocolComponent):
 
     def _get_detections_for_session(self, session):
         detections = []
-        for det in self.sessions.get(session).values():
+        det_list = list(self.sessions.get(session).values())
+        det_list.reverse()
+        for det in det_list:
             img = self._get_image_data(session, det.detection)
             detections.append((det, img))
         return detections

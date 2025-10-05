@@ -33,6 +33,7 @@ pip install asyncudp
 pip instatt aiohttp
 pip install aiortc
 pip install bidict
+pip install PyWebDAV3
 
 sudo cp installation-files/trap.service /lib/systemd/system/
 sudo systemctl enable trap.service

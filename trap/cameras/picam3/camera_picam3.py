@@ -50,10 +50,12 @@ class CameraPicam3(Camera) :
         self.picam2.set_controls({"AfMode": controls.AfModeEnum.Continuous})
 
     async def websocket_listener_task(self):
-        self.websocket.subscribe_message("picam3.mode.set", self.protocol_in_channel)
-        self.websocket.subscribe_message("picam3.position.set", self.protocol_in_channel)
-        self.websocket.subscribe_message("picam3.focus.trigger", self.protocol_in_channel)
-        await self.protocol_in_channel.subscribe(self.handle_message)
+        in_channel = self.websocket.subscribe_many_messages(
+            "picam3.mode.set",
+            "picam3.position.set",
+            "picam3.focus.trigger"
+        )
+        await in_channel.subscribe(self.handle_message)
 
     async def handle_message(self, message):
         if message.identifier == "picam3.mode.set":
@@ -105,7 +107,7 @@ class CameraPicam3(Camera) :
         af_state = metadata["AfState"]
         lens_position = metadata["LensPosition"]
 
-        msg = picam3_pb2.Frame()
+        msg = picam3_pb2.Picam3Frame()
         metadata = picam3_pb2.FrameMetadata()
         metadata.afState = self.af_states.inverse[controls.AfStateEnum(af_state)]
         metadata.position = lens_position

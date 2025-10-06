@@ -69,7 +69,7 @@ class AppRoot:
         )
 
         self.channels  = ChannelsService()
-        self.webdav = WebDavServer()
+        #self.webdav = WebDavServer()
         self.bluetooth = BluetoothService(self.configuration, self.channels) #config
         #self.network   = NetworkManager(self.configuration, self.channels)
         self.websocket = WebsocketServer(self.configuration, self.channels) #config, channels
